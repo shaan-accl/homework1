@@ -71,21 +71,43 @@ If the nodes launched from the `launchfile` are not running, you will get incorr
    /turtle1/teleport_relative
    ```
 
-9. Use the ROS command `${command and args}` to determine the type of the `/switch` service, which is `crazy_turtle_interfaces/srv/Switch`.
+9. Use the ROS command `ros2 service type /switch` to determine the type of the `/switch` service, which is `crazy_turtle_interfaces/srv/Switch`.
 
-10. Use the ROS command `${command and args}` to list the parameters of all running nodes
+10. Use the ROS command `ros2 param list` to list the parameters of all running nodes
     ```
-    ${list parameters here}
+    /mover:
+      start_type_description_service
+      use_sim_time
+      velocity
+   /roving_turtle:
+      background_b
+      background_g
+      background_r
+      holonomic
+      qos_overrides./parameter_events.publisher.depth
+      qos_overrides./parameter_events.publisher.durability
+      qos_overrides./parameter_events.publisher.history
+      qos_overrides./parameter_events.publisher.reliability
+      start_type_description_service
+      use_sim_time
     ```
 
-11. Use the ROS command `${command and args}` to get information about the `/mover` `velocity` parameter, including its type, description, and constraints
+11. Use the ROS command `ros param get /mover velocity` to get information about the `/mover` `velocity` parameter, including its type, description, and constraints
     ```
-    ${full output of the command here}
+    Double value is: 4.5
     ```
 
-12. Use the ROS command `${command and args}` to retrieve a template/prototype for entering parameters for the `/switch` service on the command line.
+12. Use the ROS command `ros2 interface show crazy_turtle_interfaces/srv/Switch` to retrieve a template/prototype for entering parameters for the `/switch` service on the command line.
     ```
-    ${full output of the command here}
+    turtlesim/Pose mixer # use a strange formula to set the new location of the turtle
+      float32 x
+      float32 y
+      float32 theta
+      float32 linear_velocity
+      float32 angular_velocity
+   ---
+   float64 x # the new x position of the new turtle
+   float64 y # the new y position of the new
     ```
 
 ## Package Exploration
