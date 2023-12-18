@@ -92,7 +92,7 @@ If the nodes launched from the `launchfile` are not running, you will get incorr
       use_sim_time
     ```
 
-11. Use the ROS command `ros param get /mover velocity` to get information about the `/mover` `velocity` parameter, including its type, description, and constraints
+11. Use the ROS command `ros2 param get /mover velocity` to get information about the `/mover` `velocity` parameter, including its type, description, and constraints
     ```
     Double value is: 4.5
     ```
@@ -111,28 +111,32 @@ If the nodes launched from the `launchfile` are not running, you will get incorr
     ```
 
 ## Package Exploration
-1. Use the ROS command `${command and args}` to list the interface types defined by `crazy_turtle_interfaces`
+1. Use the ROS command `ros2 interface package crazy_turtle_interfaces` to list the interface types defined by `crazy_turtle_interfaces`
    The output of the command looks like
    ```
-   ${list service types here}
+   crazy_turtle_interfaces/srv/Switch
    ```
-2. Use the ROS command `${command and args}` to list the executables included with the `crazy_turtle` package
+2. Use the ROS command `ros2 run crazy_turtle <tab><tab>` to list the executables included with the `crazy_turtle` package
    The output of the command looks like
    ```
-   ${list executables here}
+   mover     --prefix
    ```
 
 ## Live Interaction
-1. Use the command `${command and args here}` to retrieve the value of the `/mover velocity` parameter, which is `${value here}`.
+1. Use the command `ros2 param get /mover velocity` to retrieve the value of the `/mover velocity` parameter, which is `4.5`.
 2. The ROS command to call the `/switch` service, and it's output is listed below:
     ```
-    ${enter the command and its output here. Call with x=1.0, y=2.0, theta=0.0, angular_velocity=3.0, linear_velocity=4.0}
+   ros2 service call /switch crazy_turtle_interfaces/srv/Switch "{mixer: {x: 1.0, y: 2.0, theta: 0.0, angular_velocity: 3.0, linear_velocity: 4.0}}"
+   requester: making request: crazy_turtle_interfaces.srv.Switch_Request(mixer=turtlesim.msg.Pose(x=1.0, y=2.0, theta=0.0, linear_velocity=4.0, angular_velocity=3.0))
+
+   response:
+   crazy_turtle_interfaces.srv.Switch_Response(x=5.0, y=4.0)
     ```
 3. The `switch` service performs the following actions (in sequence):
-    1. It `${what does it do? kills | spawns | resets}` the current turtle
-    2. It then respawns a new turtle at `${location as a function of the `/switch` service parameters}`
-4. What happens to the turtle's motion if you use `${command and args here}` to change `/mover velocity` to 10? `${faster | slower | same}`
-5. Use the Linux command `${command and args}` to kill the `/mover` node.
-6. Use the ROS command `${command and args}` to start the `/mover` node with a velocity of 10. 
+    1. It `resets` the current turtle
+    2. It then respawns a new turtle at `x=5.0, y=4.0`
+4. What happens to the turtle's motion if you use `ros2 param set /mover velocity 10.0` to change `/mover velocity` to 10? `same`
+5. Use the Linux command `pkill mover` to kill the `/mover` node.
+6. Use the ROS command `ros2 run crazy_turtle mover --ros-args -p velocity:=10.0 --remap cmd_vel:=/turtle1/cmd_vel` to start the `/mover` node with a velocity of 10. 
     - Be sure to remap `cmd_vel` to `/turtle1/cmd_vel`.
-7. What happened to the turtle's velocity after relaunching `mover`? `${faster | slower | same}`
+7. What happened to the turtle's velocity after relaunching `mover`? `faster`
