@@ -24,6 +24,7 @@ Unless otherwise specified, list the command and all arguments that you passed t
 ## Runtime Information
 The `launchfile` from above should be running at all times when executing these commands.
 If the nodes launched from the `launchfile` are not running, you will get incorrect results.
+
 5. Use the ROS command `ros2 node list` to list all the nodes that are running.
    The output of the command looks like
    ```
