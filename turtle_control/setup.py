@@ -20,8 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'mover = crazy_turtle.mover:main',
-            'frequency = python_parameters.python_parameters_node:main'
+            'waypoint = turtle_control.waypoint:main',
+            'frequency = turtle_control.waypoint:main'
         ],
     },
 )
