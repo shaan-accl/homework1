@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'waypoint = turtle_control.waypoint:main',
             'frequency = turtle_control.waypoint:main'
+            'toggle = turtle_control.waypoint:main'
         ],
     },
 )
