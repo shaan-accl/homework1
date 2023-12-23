@@ -4,6 +4,7 @@ import rclpy
 from rclpy.node import Node
 from rcl_interfaces.msg import ParameterDescriptor
 from std_srvs.srv import Empty
+from turtlesim.srv import Spawn, Kill, TeleportAbsolute
 from math import sqrt
 
 class State(Enum):
@@ -20,6 +21,14 @@ class WayPoint(Node):
                                ParameterDescriptor(description="The frequency of the logger"))
         self.toggle = self.create_service(Empty, 'toggle', self.toggle_callback)
         self.load = self.create_service(Waypoints, 'load', self.load_callback)
+        self.kill = self.create_client(Kill, "kill")
+        self.spawn = self.create_client(Spawn, "spawn")
+        self.teleport_cli = self.create_client(TeleportAbsolute, "turtle1/teleport_absolute")
+        
+        while not self.teleport_cli.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Service not available, waiting again...')
+
+        self.teleport_turtle_request = TeleportAbsolute.Request()
         
         # timer_period = 100
         
@@ -35,17 +44,24 @@ class WayPoint(Node):
         # self.set_parameters([new_param])
         
     def load_callback(self, request, response):
+        self.state = State.STOPPED
         prev_x = 0
         prev_y = 0
         dist = 0
-        for i in len(request.x):    
+        for i in range(len(request.x)):    
             if(i!=0):
-                dist += sqrt((request.x - prev_x)*(request.x - prev_x) + (request.y - prev_y)*(request.y - prev_y))
+                dist += sqrt((request.x[i] - prev_x)**2 + (request.y[i] - prev_y)**2)
             
             prev_x = request.x[i]
             prev_y = request.y[i]
+            
+            self.get_logger().info('Placing X on %f,%f' % (request.x[i], request.y[i]))
+            self.teleport_turtle_request.x = request.x[i]
+            self.teleport_turtle_request.y = request.y[i]
+            self.teleport_cli.call_async(self.teleport_turtle_request)
                 
         response.dist = dist
+        self.get_logger().info('Total distance traversed = %f' % response.dist)
         
         return response
         
