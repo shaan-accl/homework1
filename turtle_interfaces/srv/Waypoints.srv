@@ -1,0 +1,4 @@
+float64[] x # the x positions of the waypoints
+float64[] y # the y positions of the waypoints
+---
+float64 dist
